@@ -5,14 +5,24 @@
 <body>
 	<!-- navbar  - you will be putting the login functions here -->
 	<nav class="navbar navbar-default">
-	  <div class="container-fluid">
-	    <div class="navbar-header">
-	      <a class="navbar-brand" href="#">
-	        Site Ace
-	      </a>
-	    </div>
-	  </div>
-	</nav>
+    <div class="container-fluid">
+
+      <div class="col-md-10">
+          <div class="navbar-header">
+          <a class="navbar-brand" href="#">Site Ace</a>
+        </div>
+      </div>
+
+      <div class="nav navbar-nav">
+            {{> loginButtons}}
+      </div>
+
+    </div>
+  </nav>
+
+
+
+
 
 	<div class="container">
 		{{> website_form}}
@@ -48,10 +58,10 @@
 
 <!-- template that displays several website items -->
 <template name="website_list">
-    <h1>Teste</h1>
+
 	<ol>
 	{{#each websites}}
-	{{>website_item}}
+	   {{>website_item}}
 	{{/each}}
 	</ol>
 </template>
@@ -62,6 +72,12 @@
 	<a href="{{url}}">{{title}}</a>
 	<p>
 		{{description}}
+	</p>
+  <p>
+		Up Votes {{upvotes}}
+	</p>
+  <p>
+		Down Vote {{downvotes}}
 	</p>
 	<a href="#" class="btn btn-default js-upvote">
 		<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
