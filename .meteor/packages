@@ -25,3 +25,5 @@ twbs:bootstrap
 accounts-ui
 accounts-password
 session
+
+iron:router

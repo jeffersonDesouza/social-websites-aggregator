@@ -1,15 +1,39 @@
 <head>
+  <meta name="viewport" content="width=divice-width, initial-scale=1.0">
   <title>siteace</title>
 </head>
 
 <body>
 	<!-- navbar  - you will be putting the login functions here -->
-	<nav class="navbar navbar-default">
+
+</body>
+<template name="ApplicationLayout">
+  {{> yield "navbar"}}
+  {{> yield "main"}}
+</template>
+
+<template name="main-content">
+  <div class="container">
+
+    {{#if isLoggedIn}}
+    <div class="row">
+      {{> website_form}}
+    </div>
+    {{/if}}
+
+    <div class="row">
+      {{> website_list}}
+    </div>
+  </div>
+</template>
+
+<template name="navbar">
+  <nav class="navbar navbar-default">
     <div class="container-fluid">
 
       <div class="col-md-10">
           <div class="navbar-header">
-          <a class="navbar-brand" href="#">Site Ace</a>
+          <a class="navbar-brand" href="/">Site Ace</a>
         </div>
       </div>
 
@@ -19,22 +43,7 @@
 
     </div>
   </nav>
-
-
-
-
-
-	<div class="container">
-
-    {{#if isLoggedIn}}
-		  {{> website_form}}
-    {{/if}}
-
-    {{> website_list}}
-
-	</div>
-</body>
-
+</template>
 
 <template name="website_form">
 
@@ -75,11 +84,7 @@
 
 <!-- template that displays individual website entries -->
 <template name="website_item">
-
-
-
     <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-
       <li class="thumbnail">
       	<a href="{{url}}">{{title}}</a>
       	<p>
@@ -97,8 +102,44 @@
       	<a href="#" class="btn btn-default js-downvote">
       		<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
       	</a>
+
+        <form class="site-details-router">
+            <a href="/website/{{_id}}" class="btn btn-info">See Details</a>
+        </form>
+
       </li>
     </div>
+</template>
 
+<template name="website">
+
+  <div class="container">
+
+    <div class="row">
+        <h3>Title: {{title}}</h3>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+          Positive Votes: {{upvotes}}
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+          Negative Votes: {{downvotes}}
+      </div>
+    </div>
+
+    <div class="row">
+        <h3>Description:</h3>
+    </div>
+
+    <div class="row">
+      {{description}}
+    </div>
+
+    <div class="row">
+      <h1>The Site</h1>
+    </div>
+  </div>
 
 </template>

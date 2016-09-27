@@ -2,16 +2,49 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 import './main.html';
-// Infinite Scroll
+
+//DB definition
 Websites = new Mongo.Collection("websites");
 
 
+//Rounting Config
+Router.configure({
+  layoutTemplate: 'ApplicationLayout'
+});
+
+Router.route('/', function () {
+	this.render('navbar',{
+		to:'navbar'
+	});
+	this.render('main-content', {
+    to:"main"
+  });
+});
+
+Router.route('/website/:_id', function () {
+  this.render('navbar', {
+    to:"navbar"
+  });
+  this.render('website', {
+    to:"main",
+    data:function(){
+      return Websites.findOne({_id:this.params._id});
+    }
+  });
+});
+
+
+
+
+
+// Acounts Config
 Accounts.ui.config({
 	passwordSignupFields: "USERNAME_AND_EMAIL"
 });
 
 
-  Session.set("imageLimit", 8);
+// Infinite Scroll
+  Session.set("webSitesLimit", 8);
 
   lastScrollTop = 0;
   $(window).scroll(function(event){
@@ -22,7 +55,7 @@ Accounts.ui.config({
       // test if we are going down
       if (scrollTop > lastScrollTop){
         // yes we are heading down...
-       Session.set("imageLimit", Session.get("imageLimit") + 4);
+       Session.set("webSitesLimit", Session.get("webSitesLimit") + 4);
       }
 
       lastScrollTop = scrollTop;
@@ -37,13 +70,7 @@ Accounts.ui.config({
 	// helper function that returns all available websites
 	Template.website_list.helpers({
 		websites:function(){
-			return Websites.find({},
-          {sort:
-            {
-                upvotes: -1,
-                downvotes:-1
-            }
-          });
+			return Websites.find({}, {sort: {upvotes: -1,downvotes:-1}, limit: Session.get("webSitesLimit")});
 	  }
 	});
 
