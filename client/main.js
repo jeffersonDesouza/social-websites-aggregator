@@ -3,6 +3,8 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 import './main.html';
 // Infinite Scroll
+Websites = new Mongo.Collection("websites");
+
 
 Accounts.ui.config({
 	passwordSignupFields: "USERNAME_AND_EMAIL"
@@ -45,7 +47,7 @@ Accounts.ui.config({
 	  }
 	});
 
-  Template.website_form.helpers({
+  Template.body.helpers({
     isLoggedIn: function(){
         if(Meteor.user()){
           return true;
@@ -125,7 +127,9 @@ Accounts.ui.config({
             title:title,
             url:url,
             description:description,
-            createdOn:new Date()
+            createdOn:new Date(),
+						upvotes:0,
+						downvotes:0
         });
 
         event.target.url.value = "";
