@@ -13,7 +13,7 @@
         </div>
       </div>
 
-      <div class="nav navbar-nav">
+      <div class="nav navbar-nav login-buttons">
             {{> loginButtons}}
       </div>
 
@@ -33,9 +33,13 @@
 
 <template name="website_form">
 
+  {{#if isLoggedIn}}
 	<a class="btn btn-default js-toggle-website-form" href="#">
   		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 	</a>
+  {{/if}}
+
+
 	<div id="website_form" class="hidden_div">
 		<form class="js-save-website-form">
 		  <div class="form-group">

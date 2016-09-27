@@ -2,3 +2,7 @@
 .hidden_div{
 	display:none;
 }
+
+.login-buttons{
+	padding-top: 15px;
+}

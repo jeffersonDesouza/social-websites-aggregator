@@ -25,11 +25,7 @@ Accounts.ui.config({
 
       lastScrollTop = scrollTop;
     }
-
   });
-
-
-
 
 
 	/////
@@ -48,6 +44,16 @@ Accounts.ui.config({
           });
 	  }
 	});
+
+  Template.website_form.helpers({
+    isLoggedIn: function(){
+        if(Meteor.user()){
+          return true;
+        }
+        return false;
+    }
+  });
+
 
 
 	/////
@@ -97,10 +103,6 @@ Accounts.ui.config({
               downvotes: downvotes
           }
       });
-
-
-
-
 			return false;// prevent the button from reloading the page
 		}
 	});
