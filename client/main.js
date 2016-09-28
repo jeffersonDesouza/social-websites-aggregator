@@ -16,7 +16,7 @@ Router.route('/', function () {
 	this.render('navbar',{
 		to:'navbar'
 	});
-	this.render('main-content', {
+	this.render('main_content', {
     to:"main"
   });
 });
@@ -44,7 +44,7 @@ Accounts.ui.config({
 
 
 // Infinite Scroll
-  Session.set("webSitesLimit", 8);
+  Session.set("webSitesLimit", 12);
 
   lastScrollTop = 0;
   $(window).scroll(function(event){
@@ -74,7 +74,7 @@ Accounts.ui.config({
 	  }
 	});
 
-  Template.body.helpers({
+  Template.main_content.helpers({
     isLoggedIn: function(){
         if(Meteor.user()){
           return true;
@@ -166,3 +166,28 @@ Accounts.ui.config({
 			return false;// stop the form submit from reloading the page
 		}
 	});
+
+
+
+Template.comments_template.events({
+	"submit .js-save-comments-form":function(event){
+
+		var comment = event.target.comment_about_site.value;
+		var commentUser = Meteor.users.findOne({_id:Meteor.userId()});
+
+		comment_obj = {
+			comment_text: comment,
+			comment_user: commentUser.username
+		};
+
+		Websites.update({_id:this._id},{
+			$push:{
+				comments: comment_obj
+			}
+		});
+
+
+		event.target.comment_about_site.value ="";
+		return false;// stop the form submit from reloading the page
+	}
+});

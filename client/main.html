@@ -12,7 +12,7 @@
   {{> yield "main"}}
 </template>
 
-<template name="main-content">
+<template name="main_content">
   <div class="container">
 
     {{#if isLoggedIn}}
@@ -90,22 +90,28 @@
       	<p>
       		{{description}}
       	</p>
-        <p>
-      		Up Votes {{upvotes}}
-      	</p>
-        <p>
-      		Down Vote {{downvotes}}
-      	</p>
-      	<a href="#" class="btn btn-default js-upvote">
-      		<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
-      	</a>
-      	<a href="#" class="btn btn-default js-downvote">
-      		<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-      	</a>
 
-        <form class="site-details-router">
+          <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+            Up Votes: {{upvotes}}
+          </div>
+
+          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <a href="#" class="btn btn-default js-upvote">
+              <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+            </a>
+          </div>
+
+          <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+            Downs {{downvotes}}
+          </div>
+
+          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <a href="#" class="btn btn-default js-downvote">
+              <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+            </a>
+          </div>
+
             <a href="/website/{{_id}}" class="btn btn-info">See Details</a>
-        </form>
 
       </li>
     </div>
@@ -137,9 +143,35 @@
       {{description}}
     </div>
 
-    <div class="row">
-      <h1>The Site</h1>
-    </div>
+    {{>comments_template}}
   </div>
+
+</template>
+
+
+<template id="comments_template" name="comments_template">
+    <form class="js-save-comments-form">
+
+    <h3>Make a Comment about the page</h3>
+    <div class="form-group col-md-12">
+        <textarea name="comment_about_site" rows="8" cols="40"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+
+
+  <div class="row">
+      <h4>Comments:</h4>
+  </div>
+
+  <div class="row">
+    {{#each comments}}
+        <p>{{comment_user}}</p>
+        <p>{{comment_text}}</p>
+    {{/each}}
+  </div>
+
+
 
 </template>
