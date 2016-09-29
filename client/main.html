@@ -9,6 +9,7 @@
 </body>
 <template name="ApplicationLayout">
   {{> yield "navbar"}}
+  {{> yield "search"}}
   {{> yield "main"}}
 </template>
 
@@ -43,10 +44,23 @@
 
     </div>
   </nav>
+
 </template>
 
-<template name="website_form">
+<template name="search">
+  <div class="container">
+    <form id="search">
+        <div class="form-group">
+            <input type="text" id="searchValue"  class="form-control" placeholder="Seach your preferences here."/>
+        </div>
+    </form>
+    <hr/>
+  </div>
+</template>
 
+
+
+<template name="website_form">
 	<a class="btn btn-default js-toggle-website-form" href="#">
   		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 	</a>
@@ -110,9 +124,7 @@
               <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
             </a>
           </div>
-
             <a href="/website/{{_id}}" class="btn btn-info">See Details</a>
-
       </li>
     </div>
 </template>
@@ -150,16 +162,15 @@
 
 
 <template id="comments_template" name="comments_template">
+
     <form class="js-save-comments-form">
+        <div class="form-group">
+          <h3>Make a Comment about the page</h3>
+          <textarea name="comment_about_site" rows="5"  class="form-control"></textarea>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </div>
 
-    <h3>Make a Comment about the page</h3>
-    <div class="form-group col-md-12">
-        <textarea name="comment_about_site" rows="8" cols="40"></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-default">Submit</button>
-  </form>
-
+    </form>
 
   <div class="row">
       <h4>Comments:</h4>
@@ -168,13 +179,10 @@
   <div class="row">
     {{#each comments}}
       <li class="thumbnail">
-        <p><strong>{{comment_user}}" says:"</strong></p>
-
+        <p><strong>{{comment_user}} says:</strong></p>
         <p>{{comment_text}}</p>
       </li>
     {{/each}}
   </div>
-
-
 
 </template>

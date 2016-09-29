@@ -7,34 +7,6 @@ import './main.html';
 Websites = new Mongo.Collection("websites");
 
 
-//Rounting Config
-Router.configure({
-  layoutTemplate: 'ApplicationLayout'
-});
-
-Router.route('/', function () {
-	this.render('navbar',{
-		to:'navbar'
-	});
-	this.render('main_content', {
-    to:"main"
-  });
-});
-
-Router.route('/website/:_id', function () {
-  this.render('navbar', {
-    to:"navbar"
-  });
-  this.render('website', {
-    to:"main",
-    data:function(){
-      return Websites.findOne({_id:this.params._id});
-    }
-  });
-});
-
-
-
 
 
 // Acounts Config
@@ -63,6 +35,45 @@ Accounts.ui.config({
   });
 
 
+
+
+//Rounting Config
+Router.configure({
+  layoutTemplate: 'ApplicationLayout'
+});
+
+Router.route('/', function () {
+	this.render('navbar',{
+		to:'navbar'
+	});
+
+	this.render('search', {
+    to:"search"
+  });
+
+
+	this.render('main_content', {
+    to:"main"
+  });
+
+
+});
+
+Router.route('/website/:_id', function () {
+  this.render('navbar', {
+    to:"navbar"
+  });
+  this.render('website', {
+    to:"main",
+    data:function(){
+      return Websites.findOne({_id:this.params._id});
+    }
+  });
+});
+
+
+
+
 	/////
 	// template helpers
 	/////
@@ -70,8 +81,22 @@ Accounts.ui.config({
 	// helper function that returns all available websites
 	Template.website_list.helpers({
 		websites:function(){
-			return Websites.find({}, {sort: {upvotes: -1,downvotes:-1}, limit: Session.get("webSitesLimit")});
-	  }
+
+		Meteor.subscribe("search", Session.get("searchValue"));
+
+
+
+			if (Session.get("searchValue")) {
+				 return Websites.find({}, { sort: [["score", "desc"]] });
+
+			} else {
+				return Websites.find({}, {sort: {upvotes: -1,downvotes:-1}, limit: Session.get("webSitesLimit")});
+			}
+    //	return Websites.find({}, {sort: {upvotes: -1,downvotes:-1}, limit: Session.get("webSitesLimit")});
+	  //return Websites.find(selector, {sort: {upvotes: -1,downvotes:-1}, limit: Session.get("webSitesLimit")});
+
+
+    }
 	});
 
   Template.main_content.helpers({
@@ -85,9 +110,20 @@ Accounts.ui.config({
 
 
 
+
+
 	/////
 	// template events
 	/////
+
+	Template.search.events({
+     "keyup #search": function (e) {
+       e.preventDefault();
+       Session.set("searchValue", $("#searchValue").val());
+     }
+   });
+
+
 
 
 
@@ -147,7 +183,7 @@ Accounts.ui.config({
       var title = event.target.title.value;
       var description = event.target.description.value;
 
-
+      var keyWordsArray = setKeyWords(description);
 
 //      if(Meteor.userId()){     }
         Websites.insert({
@@ -156,8 +192,11 @@ Accounts.ui.config({
             description:description,
             createdOn:new Date(),
 						upvotes:0,
-						downvotes:0
+						downvotes:0,
+            keyWords: keyWordsArray,
         });
+
+
 
         event.target.url.value = "";
         event.target.title.value = "";
@@ -191,3 +230,33 @@ Template.comments_template.events({
 		return false;// stop the form submit from reloading the page
 	}
 });
+
+
+
+function setKeyWords(descricao){
+	var communWords = ["",",",".","is", "this", "where", 'was','a','evething','the','when','like','submint','to','can','hi'];
+
+	var key_words =  descricao.split(" ");
+	//Criamos uma função de filtro com uma função de testes, se essa função retornar tru a palavra é filtrada, caso crontrario nao
+	var filtro = function(arrayPalavras, funcaoTeste){
+		var filtradas = [];
+
+		for(let i=0; i<arrayPalavras.length; i++){
+
+			if(funcaoTeste(arrayPalavras[i])){
+				var palavra = arrayPalavras[i].replace(/[^\w\s]/gi,"");
+				filtradas.push(palavra);
+			}
+		}
+		return filtradas;
+	}
+	var verifyCommunWord = function(palavra){
+		for(let i=0; i<communWords.length; i++){
+				if(palavra.toLowerCase() === communWords[i].toLowerCase()){
+					return false;
+				}
+		}
+		return true;
+	}
+		return filtro(key_words, verifyCommunWord);
+}
