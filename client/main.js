@@ -81,12 +81,12 @@ Router.route('/website/:_id', function () {
 	Template.website_list.helpers({
 		websites:function(){
 
-		Meteor.subscribe("search", Session.get("searchValue"));
+		Meteor.subscribe("websites", Session.get("searchValue"));
 
 
 
 			if (Session.get("searchValue")) {
-				 return Websites.find({}, { sort: [["score", "desc"]] });
+				 return Websites.find({});
 
 			} else {
 				return Websites.find({}, {sort: {upvotes: -1,downvotes:-1}, limit: Session.get("webSitesLimit")});
@@ -118,7 +118,16 @@ Router.route('/website/:_id', function () {
 	Template.search.events({
      "keyup #search": function (e) {
        e.preventDefault();
-       Session.set("searchValue", $("#searchValue").val());
+       
+       let pesquisaSite = $("#searchValue").val();
+
+       if(pesquisaSite){
+       		Session.set("searchValue", pesquisaSite);      	
+       }else{
+       		Session.set("searchValue", undefined);
+       }
+
+
      }
    });
 

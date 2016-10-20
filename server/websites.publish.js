@@ -1,4 +1,4 @@
-
+/*
 
 Meteor.publish("search", function(searchValue) {
   if (!searchValue) {
@@ -21,4 +21,19 @@ Meteor.publish("search", function(searchValue) {
       }
     }
   );
+});
+
+
+*/
+
+
+Meteor.publish("websites", function(searchValue) {
+  if (!searchValue) {
+    return Websites.find({});
+
+//    $regex: `^${searchValue}`, $options: 'i'}
+  }
+    let selector = {title: {$regex: `^${searchValue}`, $options:'i'}};
+
+    return Websites.find(selector);
 });
