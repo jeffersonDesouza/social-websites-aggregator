@@ -6,3 +6,19 @@
 .login-buttons{
 	padding-top: 15px;
 }
+
+.thumbnail{
+	height:200px;
+	max-height: 210px;
+}
+
+.description-thumbnail {
+
+  overflow : hidden;
+  max-height: 100px;
+  height : 50px;
+}
+
+.url-title{
+	padding-bottom: 20px;
+}

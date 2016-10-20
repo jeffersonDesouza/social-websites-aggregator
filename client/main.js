@@ -8,7 +8,6 @@ Websites = new Mongo.Collection("websites");
 
 
 
-
 // Acounts Config
 Accounts.ui.config({
 	passwordSignupFields: "USERNAME_AND_EMAIL"
@@ -176,7 +175,8 @@ Router.route('/website/:_id', function () {
 		"click .js-toggle-website-form":function(event){
 			$("#website_form").toggle('slow');
 		},
-		"submit .js-save-website-form":function(event){
+
+			"submit .js-save-website-form":function(event){
 
 			// here is an example of how to get the url out of the form:
 			var url = event.target.url.value;
@@ -197,13 +197,24 @@ Router.route('/website/:_id', function () {
         });
 
 
-
-        event.target.url.value = "";
-        event.target.title.value = "";
-        event.target.description.value = "";
-
+         $(".js-save-website-form input").val('');
+				 $(".js-toggle-website-form").click();
 			return false;// stop the form submit from reloading the page
-		}
+		},
+		"change .js-save-website-form":function(event){
+				console.log("change");
+
+				console.log(url.value);
+
+				 Meteor.call("getWebsiteData", url.value, function(error, results) {
+					 console.log(error);
+					 console.log(results);
+				 });
+
+
+
+		},
+
 	});
 
 
@@ -249,7 +260,7 @@ function setKeyWords(descricao){
 			}
 		}
 		return filtradas;
-	}
+	};
 	var verifyCommunWord = function(palavra){
 		for(let i=0; i<communWords.length; i++){
 				if(palavra.toLowerCase() === communWords[i].toLowerCase()){
@@ -257,6 +268,6 @@ function setKeyWords(descricao){
 				}
 		}
 		return true;
-	}
+	};
 		return filtro(key_words, verifyCommunWord);
 }
