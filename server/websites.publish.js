@@ -27,7 +27,10 @@ Meteor.publish("search", function(searchValue) {
 */
 
 
+
 Meteor.publish("websites", function(searchValue) {
+
+   
   if (!searchValue) {
     return Websites.find({});
 
@@ -36,4 +39,25 @@ Meteor.publish("websites", function(searchValue) {
     let selector = {title: {$regex: `^${searchValue}`, $options:'i'}};
 
     return Websites.find(selector);
+});
+
+
+
+
+
+Websites.allow({
+  insert: function(){
+    
+    if(Meteor.user()){
+      return true;
+    }
+
+    return false;
+  },
+  update: function(){
+    return true;
+  },
+  remove: function(){
+    return false;
+  }
 });

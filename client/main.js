@@ -7,6 +7,7 @@ import './main.html';
 Websites = new Mongo.Collection("websites");
 
 
+Meteor.subscribe("users");
 
 // Acounts Config
 Accounts.ui.config({
@@ -15,10 +16,10 @@ Accounts.ui.config({
 
 
 // Infinite Scroll
-  Session.set("webSitesLimit", 12);
+Session.set("webSitesLimit", 12);
 
-  lastScrollTop = 0;
-  $(window).scroll(function(event){
+lastScrollTop = 0;
+$(window).scroll(function(event){
     // test if we are near the bottom of the window
     if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
       // where are we in the page?
@@ -26,19 +27,19 @@ Accounts.ui.config({
       // test if we are going down
       if (scrollTop > lastScrollTop){
         // yes we are heading down...
-       Session.set("webSitesLimit", Session.get("webSitesLimit") + 4);
-      }
-
-      lastScrollTop = scrollTop;
+        Session.set("webSitesLimit", Session.get("webSitesLimit") + 4);
     }
-  });
+
+    lastScrollTop = scrollTop;
+}
+});
 
 
 
 
 //Rounting Config
 Router.configure({
-  layoutTemplate: 'ApplicationLayout'
+	layoutTemplate: 'ApplicationLayout'
 });
 
 Router.route('/', function () {
@@ -47,29 +48,31 @@ Router.route('/', function () {
 	});
 
 	this.render('search', {
-    to:"search"
-  });
+		to:"search"
+	});
 
 
 	this.render('main_content', {
-    to:"main"
-  });
+		to:"main"
+	});
 
 
 });
 
 Router.route('/website/:_id', function () {
-  this.render('navbar', {
-    to:"navbar"
-  });
-  this.render('website', {
-    to:"main",
-    data:function(){
-      return Websites.findOne({_id:this.params._id});
-    }
-  });
-});
+	this.render('navbar', {
+		to:"navbar"
+	});
+	this.render('website', {
+		to:"main",
+		data:function(){
+			Meteor.subscribe("websites", Session.get("searchValue"));	
 
+			
+			return Websites.findOne({_id:this.params._id});
+		}
+	});
+});
 
 
 
@@ -77,30 +80,12 @@ Router.route('/website/:_id', function () {
 	// template helpers
 	/////
 
-	// helper function that returns all available websites
-	Template.website_list.helpers({
-		websites:function(){
-
-		Meteor.subscribe("websites", Session.get("searchValue"));
 
 
-
-			if (Session.get("searchValue")) {
-				 return Websites.find({});
-
-			} else {
-				return Websites.find({}, {sort: {upvotes: -1,downvotes:-1}, limit: Session.get("webSitesLimit")});
-			}
-    //	return Websites.find({}, {sort: {upvotes: -1,downvotes:-1}, limit: Session.get("webSitesLimit")});
-	  //return Websites.find(selector, {sort: {upvotes: -1,downvotes:-1}, limit: Session.get("webSitesLimit")});
-
-
-    }
-	});
 
   Template.main_content.helpers({
     isLoggedIn: function(){
-        if(Meteor.user()){
+        if(Meteor.userId()){
           return true;
         }
         return false;
@@ -108,28 +93,25 @@ Router.route('/website/:_id', function () {
   });
 
 
-
-
-
 	/////
 	// template events
 	/////
 
 	Template.search.events({
-     "keyup #search": function (e) {
-       e.preventDefault();
-       
-       let pesquisaSite = $("#searchValue").val();
+		"keyup #search": function (e) {
+			e.preventDefault();
 
-       if(pesquisaSite){
-       		Session.set("searchValue", pesquisaSite);      	
-       }else{
-       		Session.set("searchValue", undefined);
-       }
+			let pesquisaSite = $("#searchValue").val();
+
+			if(pesquisaSite){
+				Session.set("searchValue", pesquisaSite);
+			}else{
+				Session.set("searchValue", undefined);
+			}
 
 
-     }
-   });
+		}
+	});
 
 
 
@@ -140,19 +122,19 @@ Router.route('/website/:_id', function () {
 			// example of how you can access the id for the website in the database
 			// (this is the data context for the template)
 			var website_id = this._id;
-      var upvotes = this.upvotes;
+			var upvotes = this.upvotes;
 
-      if(upvotes){
-          upvotes++;
-      }else{
-        upvotes=1;
-      }
+			if(upvotes){
+				upvotes++;
+			}else{
+				upvotes=1;
+			}
 
-      Websites.update({_id:website_id}, {
-          $set:{
-              upvotes:upvotes
-          }
-      });
+			Websites.update({_id:website_id}, {
+				$set:{
+					upvotes:upvotes
+				}
+			});
 
 			// put the code in here to add a vote to a website!
 
@@ -163,19 +145,19 @@ Router.route('/website/:_id', function () {
 			// example of how you can access the id for the website in the database
 			// (this is the data context for the template)
 			var website_id = this._id;
-      var downvotes = this.downvotes;
+			var downvotes = this.downvotes;
 
-      if(downvotes){
-          downvotes--;
-      }else{
-        downvotes = -1;
-      }
+			if(downvotes){
+				downvotes--;
+			}else{
+				downvotes = -1;
+			}
 
-      Websites.update({_id:website_id}, {
-          $set:{
-              downvotes: downvotes
-          }
-      });
+			Websites.update({_id:website_id}, {
+				$set:{
+					downvotes: downvotes
+				}
+			});
 			return false;// prevent the button from reloading the page
 		}
 	});
@@ -185,40 +167,37 @@ Router.route('/website/:_id', function () {
 			$("#website_form").toggle('slow');
 		},
 
-			"submit .js-save-website-form":function(event){
+		"submit .js-save-website-form":function(event){
 
 			// here is an example of how to get the url out of the form:
 			var url = event.target.url.value;
-      var title = event.target.title.value;
-      var description = event.target.description.value;
+			var title = event.target.title.value;
+			var description = event.target.description.value;
 
-      var keyWordsArray = setKeyWords(description);
+			var keyWordsArray = setKeyWords(description);
 
-//      if(Meteor.userId()){     }
-        Websites.insert({
-            title:title,
-            url:url,
-            description:description,
-            createdOn:new Date(),
-						upvotes:0,
-						downvotes:0,
-            keyWords: keyWordsArray,
-        });
+				//      if(Meteor.userId()){     }
+				Websites.insert({
+					title:title,
+					url:url,
+					description:description,
+					createdOn:new Date(),
+					upvotes:0,
+					downvotes:0,
+					keyWords: keyWordsArray,
+				});
 
 
-         $(".js-save-website-form input").val('');
-				 $(".js-toggle-website-form").click();
+$(".js-save-website-form input").val('');
+$(".js-toggle-website-form").click();
 			return false;// stop the form submit from reloading the page
 		},
 		"change .js-save-website-form":function(event){
-				console.log("change");
-
-				console.log(url.value);
-
-				 Meteor.call("getWebsiteData", url.value, function(error, results) {
-					 console.log(error);
-					 console.log(results);
-				 });
+		
+			Meteor.call("getWebsiteData", url.value, function(error, results) {
+				console.log(error);
+				console.log(results);
+			});
 
 
 
@@ -228,35 +207,44 @@ Router.route('/website/:_id', function () {
 
 
 
-Template.comments_template.events({
-	"submit .js-save-comments-form":function(event){
+	Template.comments_template.events({
+		"submit .js-save-comments-form":function(event){
 
-		var comment = event.target.comment_about_site.value;
-		var commentUser = Meteor.users.findOne({_id:Meteor.userId()});
+			var comment = event.target.comment_about_site.value;
+			var commentUser = Meteor.users.findOne({_id:Meteor.userId()});
 
-		comment_obj = {
-			comment_text: comment,
-			comment_user: commentUser.username
-		};
+			comment_obj = {
+				comment_text: comment,
+				comment_user: commentUser.username
+			};
 
-		Websites.update({_id:this._id},{
-			$push:{
-				comments: comment_obj
-			}
-		});
+			Websites.update({_id:this._id},{
+				$push:{
+					comments: comment_obj
+				}
+			});
 
 
-		event.target.comment_about_site.value ="";
+			event.target.comment_about_site.value ="";
 		return false;// stop the form submit from reloading the page
 	}
 });
 
+Template.comments_template.helpers({
+
+isLoggedIn: function(){
+        if(Meteor.userId()){
+          return true;
+        }
+        return false;
+    }
+});
 
 
-function setKeyWords(descricao){
-	var communWords = ["",",",".","is", "this", "where", 'was','a','evething','the','when','like','submint','to','can','hi'];
+	function setKeyWords(descricao){
+		var communWords = ["",",",".","is", "this", "where", 'was','a','evething','the','when','like','submint','to','can','hi'];
 
-	var key_words =  descricao.split(" ");
+		var key_words =  descricao.split(" ");
 	//Criamos uma função de filtro com uma função de testes, se essa função retornar tru a palavra é filtrada, caso crontrario nao
 	var filtro = function(arrayPalavras, funcaoTeste){
 		var filtradas = [];
@@ -272,11 +260,11 @@ function setKeyWords(descricao){
 	};
 	var verifyCommunWord = function(palavra){
 		for(let i=0; i<communWords.length; i++){
-				if(palavra.toLowerCase() === communWords[i].toLowerCase()){
-					return false;
-				}
+			if(palavra.toLowerCase() === communWords[i].toLowerCase()){
+				return false;
+			}
 		}
 		return true;
 	};
-		return filtro(key_words, verifyCommunWord);
+	return filtro(key_words, verifyCommunWord);
 }

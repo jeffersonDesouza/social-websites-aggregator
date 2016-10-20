@@ -1,0 +1,35 @@
+
+<!-- template that displays individual website entries -->
+<template name="website_item">
+
+    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 thumbnail-sites">
+
+      <li class="thumbnail">
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 url-title">
+          <a href="{{url}}">{{title}}</a>
+        </div>
+
+        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+            Up Votes: {{upvotes}}
+        </div>
+
+          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <a href="#" class="btn btn-default js-upvote">
+              <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+            </a>
+          </div>
+
+          <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+            Downs {{downvotes}}
+          </div>
+
+          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <a href="#" class="btn btn-default js-downvote">
+              <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+            </a>
+          </div>
+            <a href="/website/{{_id}}" class="btn btn-info js-website">See Details</a>
+      </li>
+    </div>
+</template>

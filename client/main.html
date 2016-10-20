@@ -28,24 +28,7 @@
   </div>
 </template>
 
-<template name="navbar">
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
 
-      <div class="col-md-10">
-          <div class="navbar-header">
-          <a class="navbar-brand" href="/">Site Ace</a>
-        </div>
-      </div>
-
-      <div class="nav navbar-nav login-buttons">
-            {{> loginButtons}}
-      </div>
-
-    </div>
-  </nav>
-
-</template>
 
 <template name="search">
   <div class="container">
@@ -60,31 +43,6 @@
 
 
 
-<template name="website_form">
-	<a class="btn btn-default js-toggle-website-form" href="#">
-  		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-	</a>
-
-
-	<div id="website_form" class="hidden_div">
-		<form class="js-save-website-form">
-		  <div class="form-group">
-		    <label for="url">Site address</label>
-		    <input type="text" class="form-control js-url-input" id="url" placeholder="http://www.mysite.com">
-		  </div>
-		  <div class="form-group">
-		    <label for="title">Title</label>
-		    <input type="text" class="form-control" id="title" placeholder="Mysite">
-		  </div>
-		    <div class="form-group">
-		    <label for="description">Description</label>
-		    <input type="text" class="form-control" id="description" placeholder="I found this site really useful for ...">
-		  </div>
-
-		  <button type="submit" class="btn btn-default">Submit</button>
-		</form>
-	</div>
-</template>
 
 <!-- template that displays several website items -->
 <template name="website_list">
@@ -96,95 +54,5 @@
 	</ol>
 </template>
 
-<!-- template that displays individual website entries -->
-<template name="website_item">
-
-    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 thumbnail-sites">
-
-      <li class="thumbnail">
-
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 url-title">
-          <a href="{{url}}">{{title}}</a>
-        </div>
-
-        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
-            Up Votes: {{upvotes}}
-        </div>
-
-          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-            <a href="#" class="btn btn-default js-upvote">
-              <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
-            </a>
-          </div>
-
-          <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
-            Downs {{downvotes}}
-          </div>
-
-          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-            <a href="#" class="btn btn-default js-downvote">
-              <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-            </a>
-          </div>
-            <a href="/website/{{_id}}" class="btn btn-info">See Details</a>
-      </li>
-    </div>
-</template>
-
-<template name="website">
-
-  <div class="container">
-
-    <div class="row">
-        <h3>Title: {{title}}</h3>
-    </div>
-
-    <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
-          Positive Votes: {{upvotes}}
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
-          Negative Votes: {{downvotes}}
-      </div>
-    </div>
-
-    <div class="row">
-        <h3>Description:</h3>
-    </div>
-
-    <div class="row">
-      {{description}}
-    </div>
-
-    {{>comments_template}}
-  </div>
-
-</template>
 
 
-<template id="comments_template" name="comments_template">
-
-    <form class="js-save-comments-form">
-        <div class="form-group">
-          <h3>Make a Comment about the page</h3>
-          <textarea name="comment_about_site" rows="5"  class="form-control"></textarea>
-          <button type="submit" class="btn btn-default">Submit</button>
-        </div>
-
-    </form>
-
-  <div class="row">
-      <h4>Comments:</h4>
-  </div>
-
-  <div class="row">
-    {{#each comments}}
-      <li class="thumbnail">
-        <p><strong>{{comment_user}} says:</strong></p>
-        <p>{{comment_text}}</p>
-      </li>
-    {{/each}}
-  </div>
-
-</template>

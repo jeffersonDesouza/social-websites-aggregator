@@ -1,0 +1,31 @@
+<template name="website">
+
+  <div class="container">
+
+    <div class="row">
+        <h3>Title: {{title}}</h3>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+          Positive Votes: {{upvotes}}
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+          Negative Votes: {{downvotes}}
+      </div>
+    </div>
+
+    <div class="row">
+        <h3>Description:</h3>
+    </div>
+
+    <div class="row">
+      {{description}}
+    </div>
+
+    {{>comments_template}}
+  </div>
+
+</template>
+
